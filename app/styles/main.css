@@ -1,0 +1,68 @@
+.shade-of-black{
+    background-color: rgba(71,72,75, .7) !important ;  
+}
+
+body{
+    background-image: url("../images/background.jpg");
+}
+
+a:link { 
+    text-decoration:none; 
+} 
+
+nav ul a,
+nav .brand-logo {
+  color: white;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.button-collapse {
+  color: #3f51b5;
+}
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;      
+}
+  .parallax-container .section {
+    width: 100%;
+  }
+
+@media only screen and (max-width : 992px) {    
+  .parallax-container .section {    
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 10%;
+  }
+}
+
+@media only screen and (max-width : 600px) {
+
+   h1 {
+      font-size: 3em;
+   }
+
+   h2 {
+      font-size: 2em;
+   }  
+    
+  #index-banner .section {
+    top: 0;
+  }
+}
+
+.icon-block {
+  padding: 0 5px;
+}
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+footer.page-footer {
+  margin: 0;
+}
