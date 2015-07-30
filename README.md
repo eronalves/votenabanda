@@ -7,7 +7,9 @@ version 0.11.1.
 Main Uses:
 
 [AngularJS](https://github.com/angular/angular)
+
 [Materialize](https://github.com/Dogfalo/materialize)
+
 [Angular Youtube Embed](https://github.com/brandly/angular-youtube-embed)
 
 ## Build & development
