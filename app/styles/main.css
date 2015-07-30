@@ -19,6 +19,10 @@ p {
   line-height: 2rem;
 }
 
+.progress {
+  width: 92%;
+}
+
 .button-collapse {
   color: #3f51b5;
 }
@@ -53,6 +57,10 @@ p {
     
   #index-banner .section {
     top: 0;
+  }
+    
+  .progress{
+    left: 3%;
   }
 }
 

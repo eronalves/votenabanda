@@ -8,10 +8,14 @@ votacaoApp.controller('VotacaoCtrl', function($scope, $http, _, goLocation, Band
 
             $scope.bandaDois = $scope.votacoes[$scope.indexVotacao].bandaDois;
             $scope.bandaDoisYoutube = $scope.votacoes[$scope.indexVotacao].bandaDois.idYoutube;
-
-            $scope.indexVotacao = $scope.indexVotacao + 1;                        
+            
+            $scope.indexVotacao = $scope.indexVotacao + 1;              
+            
+            var percentual = (($scope.indexVotacao -1) * 100) / $scope.votacoes.length;
+            $scope.percentual = percentual + '%';                        
         }else{
-            $scope.showModal($scope);
+            $scope.percentual = '100%';            
+            $scope.showModal($scope);            
         }
     };   
     
@@ -37,6 +41,8 @@ votacaoApp.controller('VotacaoCtrl', function($scope, $http, _, goLocation, Band
         $scope.votacoes = $scope.analiseCombinatoria($scope.bandas);
         $scope.indexVotacao = 0;  
         $scope.proximaVotacao();
+        $scope.nome = "";
+        $scope.email = "";
     });
     
     $scope.findBanda = function(id){
@@ -46,15 +52,17 @@ votacaoApp.controller('VotacaoCtrl', function($scope, $http, _, goLocation, Band
     }
     
     $scope.votarBanda = function(id){
-        var index = $scope.indexVotacao -1;
-        var banda = $scope.findBanda(id);
-        if(!banda.votos){
-            banda.votos = 1;
-        }else{
-            banda.votos = banda.votos + 1;
-        }                    
+        if(!$scope.votacaoFinalizada){        
+            var index = $scope.indexVotacao -1;
+            var banda = $scope.findBanda(id);
+            if(!banda.votos){
+                banda.votos = 1;
+            }else{
+                banda.votos = banda.votos + 1;
+            }                    
 
-        Materialize.toast('Banda ' + banda.nome + ' votada!', 2000); 
+            Materialize.toast('Banda ' + banda.nome + ' votada!', 2000); 
+        }
         $scope.proximaVotacao();  
     };
     
@@ -69,36 +77,51 @@ votacaoApp.controller('VotacaoCtrl', function($scope, $http, _, goLocation, Band
         $scope.votarBanda($scope.votacoes[index].bandaDois._id);          
     };        
     
-    $scope.showModal = function($scope){
-        $scope.nome = "";
-        $scope.email = "";
+    $scope.showModal = function($scope){        
+        $scope.votacaoFinalizada = true;
         
         var modal = angular.element('#modal');
         modal.openModal();    
     }    
     
-    $scope.enviarVotacao = function(){
-        for(var i = 0; i < $scope.bandas.length; i++){
-            if(!$scope.bandas[i].votos){
-                $scope.bandas[i].votos = 0;
-            }
+    $scope.enviarVotacao = function(){        
+        if($scope.nome && $scope.email){
+            var vDataVotacao = {email: $scope.email};
+            
+            Votacao.get(vDataVotacao).then(function(resp){
+                     if(resp.data){
+                        Materialize.toast('Você já utilizou esse e-mail para a votação! Quer que sua banda esteja no topo? Então convide seus amigos para participar da votação! (:', 8000);          
+                        goLocation.go('/');
+                    }else{
+
+                        for(var i = 0; i < $scope.bandas.length; i++){
+                            if(!$scope.bandas[i].votos){
+                                $scope.bandas[i].votos = 0;
+                            }
+                        }
+
+                        var sendVotacao = {
+                                        "nome": $scope.nome,
+                                        "email": $scope.email,
+                                        "votos": $scope.bandas                                
+                                      };
+
+                        Votacao.post(sendVotacao)
+                            .success(function(resp){
+                                Materialize.toast('Votação Conluída!', 2000); 
+                                goLocation.go('/obrigado');
+                            })
+                            .error(function(resp, status){
+                                if(status = 400)
+                                   Materialize.toast('Você já utilizou esse e-mail para a votação! Quer que sua banda esteja no topo? Então convide seus amigos para participar da votação! (:', 2000);          
+                            });    
+                    }    
+            
+                });
+            
+        }else{
+            Materialize.toast('Preencha corretamente o formulário para enviar seus votos.', 2000);          
         }
-        
-        var sendVotacao = {
-                        "nome": $scope.nome,
-                        "email": $scope.email,
-                        "votos": $scope.bandas                                
-                      };
-        
-        Votacao.post(sendVotacao)
-            .success(function(resp){
-                Materialize.toast('Votação Conluída!', 2000); 
-                goLocation.go('/obrigado');
-            })
-            .error(function(resp, status){
-                if(status = 400)
-                   Materialize.toast('Você já utilizou esse e-mail para a votação! Quer que sua banda esteja no topo? Então convide seus amigos para participar da votação! (:', 2000);          
-            });    
     }
     
 });

@@ -1,6 +1,8 @@
 <div ng-controller="VotacaoCtrl" class="container">
     <div class="section">
-
+      <div class="progress">          
+          <div class="determinate indigo" ng-style="{'width': percentual}"></div>
+      </div>
       <!--   Icon Section   -->
       <div class="row">
         <div class="col s12 m5">
@@ -71,7 +73,7 @@
       <h4>Enviar votação</h4>
       <p>Preencha as informações para enviar seus votos!</p>
       <div class="row">
-        <form class="col s12">
+        <form class="col s12" data-fv-framework="bootstrap" >
           <div class="row">
             <div class="input-field col s6">
               <i class="material-icons prefix black-text">account_circle</i>
@@ -81,15 +83,18 @@
           <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix black-text">email</i>
-              <input id="email" ng-model="email" type="email" class="validate">
+              <input id="email" ng-model="email" type="email" class="validate" data-fv-emailaddress="true">
               <label for="email" data-error="Incorreto" data-success="" class="black-text">E-mail</label>
             </div>
           </div>
         </form>
     </div>
-    </div>
+    </div>  
+        
     <div class="modal-footer">
-      <a ng-click="enviarVotacao()" class=" modal-action modal-close waves-effect waves-indigo btn-flat">Enviar</a>
-    </div>
+      <a ng-click="enviarVotacao()" class=" modal-action modal-close waves-effect waves-indigo btn-flat black-text">Enviar</a>
+    </div>    
   </div>
+    </div>
+     
 </div>
